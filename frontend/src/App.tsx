@@ -92,7 +92,7 @@ const App = () => {
 			>
 				<div style={{ flex: 1, borderStyle: "solid" }}>
 					<div>Bom dia, {cliente.nome}!</div>
-					<div>R$ {cliente.saldo},00</div>
+					<div>R$ {`${cliente.saldo},00`}</div>
 
 					{/* Saque */}
 					<div style={{ display: "flex", padding: "30px 0" }}>
