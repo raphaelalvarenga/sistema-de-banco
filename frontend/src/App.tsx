@@ -1,28 +1,10 @@
 import React, { useState } from "react";
-
-interface ILog {
-	id: number;
-	mensagem: string;
-}
-
-interface ICliente {
-	id: number;
-	nome: string;
-	saldo: number;
-	logs: Array<ILog>;
-}
-
-interface ITransferencia {
-	numeroConta: string;
-	valor: string;
-}
+import { ILog } from "./shared/interfaces/ILog";
+import { ICliente } from "./shared/interfaces/ICliente";
+import { ITransferencia } from "./shared/interfaces/ITransferencia";
+import { Button, Input, Fade, Container } from "reactstrap";
 
 const App = () => {
-	// Regras para o Flexbox
-	// 1) Criar uma div que servirá como pai
-	// 2) Criar o seu conteúdo dentro desta div utilizando div filhas
-	// 3) Atribuir à div pai o display: flex
-
 	const [cliente, setCliente] = useState<ICliente>({
 		id: 1,
 		nome: "João da Silva",
@@ -61,13 +43,11 @@ const App = () => {
 		numeroConta: "12345",
 		valor: "100",
 	});
+	const [mostrarSaldo, setMostrarSaldo] = useState<boolean>(false);
 
 	const sacar = () => {
 		const novoSaldo = cliente.saldo - parseInt(valorSaque);
 
-		// Requisitar o backend
-
-		// Foi com sucesso?
 		const success = false;
 
 		success
@@ -84,20 +64,31 @@ const App = () => {
 	};
 
 	return (
-		<>
+		<Container>
 			<div
 				style={{
 					display: "flex",
 				}}
 			>
-				<div style={{ flex: 1, borderStyle: "solid" }}>
+				<div style={{ flex: 1 }}>
 					<div>Bom dia, {cliente.nome}!</div>
-					<div>R$ {`${cliente.saldo},00`}</div>
+
+					<Button
+						outline
+						color="danger"
+						onClick={() => setMostrarSaldo(!mostrarSaldo)}
+					>
+						{mostrarSaldo ? "Esconder" : "Mostrar"} Saldo
+					</Button>
+
+					<Fade in={mostrarSaldo} tag="h5">
+						R$ {`${cliente.saldo},00`}
+					</Fade>
 
 					{/* Saque */}
 					<div style={{ display: "flex", padding: "30px 0" }}>
 						<div>
-							<input
+							<Input
 								onChange={event => {
 									setValorSaque(event.target.value);
 								}}
@@ -107,14 +98,16 @@ const App = () => {
 							/>
 						</div>
 						<div>
-							<button onClick={sacar}>Sacar</button>
+							<Button color="primary" onClick={sacar}>
+								Sacar
+							</Button>
 						</div>
 					</div>
 
 					{/* Depósito */}
 					<div style={{ display: "flex", padding: "30px 0" }}>
 						<div>
-							<input
+							<Input
 								type="number"
 								placeholder="Valor"
 								value={valorDeposito}
@@ -122,14 +115,16 @@ const App = () => {
 							/>
 						</div>
 						<div>
-							<button onClick={depositar}>Depositar</button>
+							<Button color="primary" onClick={depositar}>
+								Depositar
+							</Button>
 						</div>
 					</div>
 
 					{/* Transferência */}
 					<div style={{ display: "flex", padding: "30px 0" }}>
 						<div>
-							<input
+							<Input
 								type="text"
 								placeholder="Conta"
 								value={transferencia.numeroConta}
@@ -142,7 +137,7 @@ const App = () => {
 							/>
 						</div>
 						<div>
-							<input
+							<Input
 								type="text"
 								placeholder="Valor"
 								value={transferencia.valor}
@@ -155,11 +150,13 @@ const App = () => {
 							/>
 						</div>
 						<div>
-							<button onClick={transferir}>Enviar</button>
+							<Button color="primary" onClick={transferir}>
+								Enviar
+							</Button>
 						</div>
 					</div>
 				</div>
-				<div style={{ borderStyle: "solid", minWidth: "300px" }}>
+				<div style={{ minWidth: "300px" }}>
 					<ul>
 						{cliente.logs.map((log: ILog) => (
 							<li key={log.id}>{log.mensagem}</li>
@@ -167,7 +164,7 @@ const App = () => {
 					</ul>
 				</div>
 			</div>
-		</>
+		</Container>
 	);
 };
 
